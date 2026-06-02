@@ -1,22 +1,25 @@
 # Dependencias
-/node_modules
+**/node_modules
 
 # Build
-/dist
-/build
+**/dist
+**/build
+**/.angular
+**/tmp
+**/out-tsc
 
 # Prisma client generado
-/generated/prisma
+backend/generated/prisma
 
 # Entorno (¡contiene credenciales y JWT_SECRET!)
-.env
-.env.*
-!.env.example
+**/.env
+**/.env.*
+!**/.env.example
 
 # Logs / cobertura / cache
 *.log
-/coverage
-.eslintcache
+**/coverage
+**/.eslintcache
 
 # OS / editores
 .DS_Store
