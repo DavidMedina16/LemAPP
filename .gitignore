@@ -1,0 +1,24 @@
+# Dependencias
+/node_modules
+
+# Build
+/dist
+/build
+
+# Prisma client generado
+/generated/prisma
+
+# Entorno (¡contiene credenciales y JWT_SECRET!)
+.env
+.env.*
+!.env.example
+
+# Logs / cobertura / cache
+*.log
+/coverage
+.eslintcache
+
+# OS / editores
+.DS_Store
+.idea
+*.swp
