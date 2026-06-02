@@ -1,98 +1,107 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# LemAPP
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+**SaaS de gestión integral para firmas contables.**
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+LemAPP centraliza la operación diaria de una firma o despacho contable: administración
+**multi-empresa**, gestión de **tareas**, **facturación** (con notificaciones por
+**WhatsApp**) y un esquema de **roles** (administradora / secretaria) que delimita qué
+puede hacer cada persona.
 
-## Description
+> El objetivo es que una contadora deje de saltar entre hojas de cálculo, chats y
+> carpetas: una sola plataforma para sus empresas clientes, su equipo y su facturación.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## 🧩 Stack Tecnológico
 
-```bash
-$ pnpm install
+| Capa | Tecnología |
+|---|---|
+| **Frontend** | Angular 21 (standalone), Tailwind CSS v4, PrimeNG 21 (styled / Aura) |
+| **Backend** | NestJS 11, Prisma ORM 7 |
+| **Base de datos** | PostgreSQL |
+| **Autenticación** | JWT + control de roles (RBAC) |
+| **Gestor de paquetes** | pnpm (uso estricto — `npm` está prohibido) |
+| **Arquitectura** | Monorepo (`backend/` + `frontend/`), un solo repositorio git |
+
+---
+
+## 📦 Estructura del repositorio
+
+```
+LemAPP/
+├── backend/     # API NestJS + Prisma + PostgreSQL (JWT, RBAC)
+├── frontend/    # SPA Angular 21 + Tailwind v4 + PrimeNG
+├── CLAUDE.md    # Directrices arquitectónicas del proyecto
+└── README.md
 ```
 
-## Compile and run the project
+---
 
+## 🚦 Estado Actual del Proyecto
+
+**Backend — blindado y funcional** ✅
+- Módulos: autenticación, usuarios, empresas (companies), facturación (invoices).
+- Seguridad: **JWT** con guard global + **RBAC** (roles `administradora` / `secretaria`).
+- Validación estricta de entrada (`ValidationPipe` con whitelist) y CORS restringido.
+- Esquema y migraciones con Prisma + datos de ejemplo vía seed.
+
+**Frontend — login + cascarón del panel** ✅
+- **Login** con formulario reactivo (PrimeNG) conectado al backend.
+- **Protección de rutas**: `authGuard` / `guestGuard` + **interceptor JWT** (añade el
+  `Bearer token` y cierra sesión automáticamente ante un 401).
+- **Cascarón del Dashboard** con sidebar de navegación (Inicio, Empresas, Tareas,
+  Facturación) y `<router-outlet>` para las pantallas hijas.
+
+**Siguiente** 🔜 — Construir las pantallas hijas del dashboard (Empresas, Tareas,
+Facturación) consumiendo los módulos del backend.
+
+---
+
+## 🚀 Cómo empezar
+
+### Prerrequisitos
+- **Node.js** y **pnpm** instalados (`npm install -g pnpm` solo para obtener pnpm; a
+  partir de ahí, **siempre pnpm**).
+- Una instancia de **PostgreSQL** en ejecución.
+
+### 1. Configurar el backend
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+cd backend
+cp .env.example .env          # y completa DATABASE_URL, JWT_SECRET, etc.
+pnpm install
+pnpm db:seed                  # crea roles y usuarios de ejemplo
 ```
 
-## Run tests
-
+### 2. Configurar el frontend
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+cd frontend
+pnpm install
 ```
 
-## Deployment
+### 3. Levantar la aplicación (en dos terminales separadas)
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+**Terminal 1 — Backend** (queda en `http://localhost:3000`):
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+cd backend && pnpm start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**Terminal 2 — Frontend** (queda en `http://localhost:4200`):
+```bash
+cd frontend && pnpm start
+```
 
-## Resources
+Abre **http://localhost:4200** e inicia sesión.
 
-Check out a few resources that may come in handy when working with NestJS:
+### Credenciales de prueba (del seed)
+| Rol | Correo | Contraseña |
+|---|---|---|
+| Administradora | `developer03@pops.com.co` | `Admin1234*` |
+| Secretaria | `secretaria@lemapp.test` | `Secret1234*` |
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+## 📐 Convenciones
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Las reglas de arquitectura, estilo y seguridad del proyecto están en
+[`CLAUDE.md`](./CLAUDE.md). En resumen: **pnpm siempre**, componentes standalone +
+signals en el frontend, y no romper el backend que ya funciona.
