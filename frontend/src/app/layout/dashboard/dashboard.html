@@ -1,14 +1,23 @@
-<div class="flex h-screen bg-surface-50">
-  <!-- ===== Sidebar ===== -->
-  <aside class="flex w-64 flex-col border-r border-surface-200 bg-white">
+<p-confirmdialog />
+
+<div class="flex h-screen bg-surface-50 dark:bg-surface-950">
+  <!-- ===== Overlay (solo móvil, cuando el menú está abierto) ===== -->
+  @if (isMobileMenuOpen()) {
+    <div class="fixed inset-0 z-40 bg-black/50 md:hidden" (click)="closeMobileMenu()"></div>
+  }
+
+  <!-- ===== Sidebar (drawer en móvil, fijo en escritorio) ===== -->
+  <aside
+    class="absolute z-50 flex h-full w-64 transform flex-col border-r border-surface-200 bg-white transition-transform duration-300 md:relative md:translate-x-0 dark:border-surface-800 dark:bg-surface-900"
+    [class.-translate-x-full]="!isMobileMenuOpen()"
+    [class.translate-x-0]="isMobileMenuOpen()"
+  >
     <!-- Logo / nombre de la app -->
-    <div class="flex items-center gap-3 border-b border-surface-200 px-6 py-5">
-      <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-600 text-white">
-        <i class="pi pi-wallet text-lg"></i>
-      </span>
+    <div class="flex items-center gap-3 border-b border-surface-200 px-6 py-5 dark:border-surface-800">
+      <img src="iconoLemapp.png" alt="LEMA Consultorías" class="h-10 w-10 shrink-0 object-contain" />
       <div class="leading-tight">
-        <h1 class="text-lg font-bold text-surface-800">LemAPP</h1>
-        <p class="text-xs font-semibold uppercase tracking-wider text-primary-600">Contable</p>
+        <h1 class="text-base font-bold text-surface-800 dark:text-surface-0">LEMA Consultorías</h1>
+        <p class="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">Contable</p>
       </div>
     </div>
 
@@ -16,33 +25,37 @@
     <nav class="flex flex-1 flex-col gap-1 p-4">
       <a
         routerLink="/dashboard"
-        routerLinkActive="bg-primary-50 text-primary-700 font-semibold"
+        routerLinkActive="bg-primary-50 text-primary-700 font-semibold dark:bg-primary-500/15 dark:text-primary-300"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-surface-600 transition-colors hover:bg-surface-100"
+        (click)="closeMobileMenu()"
+        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-surface-600 transition-colors hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800"
       >
         <i class="pi pi-home w-5 text-center"></i>
         <span>Inicio</span>
       </a>
       <a
         routerLink="/dashboard/companies"
-        routerLinkActive="bg-primary-50 text-primary-700 font-semibold"
-        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-surface-600 transition-colors hover:bg-surface-100"
+        routerLinkActive="bg-primary-50 text-primary-700 font-semibold dark:bg-primary-500/15 dark:text-primary-300"
+        (click)="closeMobileMenu()"
+        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-surface-600 transition-colors hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800"
       >
         <i class="pi pi-building w-5 text-center"></i>
         <span>Empresas</span>
       </a>
       <a
         routerLink="/dashboard/tasks"
-        routerLinkActive="bg-primary-50 text-primary-700 font-semibold"
-        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-surface-600 transition-colors hover:bg-surface-100"
+        routerLinkActive="bg-primary-50 text-primary-700 font-semibold dark:bg-primary-500/15 dark:text-primary-300"
+        (click)="closeMobileMenu()"
+        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-surface-600 transition-colors hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800"
       >
         <i class="pi pi-check-square w-5 text-center"></i>
         <span>Tareas</span>
       </a>
       <a
         routerLink="/dashboard/invoices"
-        routerLinkActive="bg-primary-50 text-primary-700 font-semibold"
-        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-surface-600 transition-colors hover:bg-surface-100"
+        routerLinkActive="bg-primary-50 text-primary-700 font-semibold dark:bg-primary-500/15 dark:text-primary-300"
+        (click)="closeMobileMenu()"
+        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-surface-600 transition-colors hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800"
       >
         <i class="pi pi-file w-5 text-center"></i>
         <span>Facturación</span>
@@ -50,18 +63,26 @@
     </nav>
 
     <!-- Footer: usuario + cerrar sesión -->
-    <div class="border-t border-surface-200 p-4">
+    <div class="border-t border-surface-200 p-4 dark:border-surface-800">
       @if (user(); as u) {
         <div class="mb-3 flex items-center gap-3">
-          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-200 text-sm font-semibold text-surface-700">
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-surface-200 text-sm font-semibold text-surface-700 dark:bg-surface-700 dark:text-surface-200">
             {{ u.fullName.charAt(0) }}
           </span>
           <div class="min-w-0 leading-tight">
-            <p class="truncate text-sm font-medium text-surface-800">{{ u.fullName }}</p>
-            <p class="truncate text-xs capitalize text-surface-500">{{ u.role }}</p>
+            <p class="truncate text-sm font-medium text-surface-800 dark:text-surface-100">{{ u.fullName }}</p>
+            <p class="truncate text-xs capitalize text-surface-500 dark:text-surface-400">{{ u.role }}</p>
           </div>
         </div>
       }
+      <p-button
+        [label]="isDark() ? 'Modo claro' : 'Modo oscuro'"
+        [icon]="isDark() ? 'pi pi-sun' : 'pi pi-moon'"
+        severity="secondary"
+        [text]="true"
+        styleClass="w-full justify-start"
+        (onClick)="toggleDarkMode()"
+      />
       <p-button
         label="Cerrar sesión"
         icon="pi pi-sign-out"
@@ -73,8 +94,26 @@
     </div>
   </aside>
 
-  <!-- ===== Área principal ===== -->
-  <main class="flex-1 overflow-y-auto p-8">
-    <router-outlet />
-  </main>
+  <!-- ===== Columna principal (navbar móvil + contenido) ===== -->
+  <div class="flex flex-1 flex-col overflow-hidden">
+    <!-- Navbar móvil (solo < md) -->
+    <header class="flex items-center justify-between border-b border-surface-200 bg-white p-4 md:hidden dark:border-surface-800 dark:bg-surface-900">
+      <div class="flex items-center gap-2">
+        <img src="iconoLemapp.png" alt="LEMA Consultorías" class="h-8 w-8 shrink-0 object-contain" />
+        <span class="font-bold text-surface-800 dark:text-surface-0">LEMA Consultorías</span>
+      </div>
+      <p-button
+        icon="pi pi-bars"
+        severity="secondary"
+        [text]="true"
+        aria-label="Abrir menú"
+        (onClick)="toggleMobileMenu()"
+      />
+    </header>
+
+    <!-- Área principal -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8">
+      <router-outlet />
+    </main>
+  </div>
 </div>

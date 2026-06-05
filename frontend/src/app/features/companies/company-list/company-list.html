@@ -1,0 +1,140 @@
+<div class="space-y-6">
+  <p-toast />
+
+  <!-- ===== Encabezado ===== -->
+  <header>
+    <h2 class="text-2xl font-bold text-surface-800 dark:text-surface-0">Empresas</h2>
+    <p class="text-sm text-surface-500 dark:text-surface-400">Gestión de empresas clientes.</p>
+  </header>
+
+  <!-- ===== Toolbar ===== -->
+  <p-toolbar>
+    <ng-template pTemplate="start">
+      <span class="font-semibold text-surface-700">Listado</span>
+    </ng-template>
+    <ng-template pTemplate="end">
+      <p-button label="Nueva Empresa" icon="pi pi-plus" (onClick)="openNew()" />
+    </ng-template>
+  </p-toolbar>
+
+  <!-- ===== Tabla ===== -->
+  <div class="w-full overflow-x-auto">
+  <p-table
+    [value]="companies()"
+    [loading]="loading()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [tableStyle]="{ 'min-width': '40rem' }"
+    styleClass="p-datatable-sm"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>NIT</th>
+        <th>Razón Social</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+        <th class="w-28 text-center">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-company>
+      <tr>
+        <td>{{ company.taxId }}</td>
+        <td>{{ company.name }}</td>
+        <td>{{ company.phone || '—' }}</td>
+        <td>{{ company.email || '—' }}</td>
+        <td>
+          <div class="flex justify-center gap-2">
+            <p-button
+              icon="pi pi-pencil"
+              severity="secondary"
+              size="small"
+              [rounded]="true"
+              [text]="true"
+              (onClick)="openEdit(company)"
+            />
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              size="small"
+              [rounded]="true"
+              [text]="true"
+              (onClick)="remove(company)"
+            />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="py-6 text-center text-surface-500">
+          No hay empresas registradas.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  </div>
+
+  <!-- ===== Modal: nueva empresa ===== -->
+  <p-dialog
+    [header]="dialogHeader()"
+    [visible]="dialogVisible()"
+    (visibleChange)="dialogVisible.set($event)"
+    [modal]="true"
+    [style]="{ width: '32rem' }"
+  >
+    <form [formGroup]="form" class="flex flex-col gap-4 pt-2" (ngSubmit)="save()">
+      <div class="flex flex-col gap-1">
+        <label for="name" class="text-sm font-medium text-surface-700">Razón Social</label>
+        <input id="name" type="text" pInputText formControlName="name" fluid />
+        @if (form.controls.name.invalid && form.controls.name.touched) {
+          <small class="text-red-500">La razón social es obligatoria.</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="taxId" class="text-sm font-medium text-surface-700">NIT</label>
+        <input id="taxId" type="text" pInputText formControlName="taxId" fluid />
+        @if (form.controls.taxId.invalid && form.controls.taxId.touched) {
+          <small class="text-red-500">El NIT es obligatorio.</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="email" class="text-sm font-medium text-surface-700">Email</label>
+        <input id="email" type="email" pInputText formControlName="email" fluid />
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <small class="text-red-500">Email no válido.</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="phone" class="text-sm font-medium text-surface-700">Teléfono</label>
+        <input id="phone" type="text" pInputText formControlName="phone" fluid />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="address" class="text-sm font-medium text-surface-700">Dirección</label>
+        <input id="address" type="text" pInputText formControlName="address" fluid />
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <p-button
+          label="Cancelar"
+          severity="secondary"
+          [text]="true"
+          type="button"
+          (onClick)="dialogVisible.set(false)"
+        />
+        <p-button
+          label="Guardar"
+          icon="pi pi-check"
+          type="submit"
+          [loading]="saving()"
+        />
+      </div>
+    </form>
+  </p-dialog>
+</div>
