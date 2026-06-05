@@ -2,4 +2,9 @@
 @import "primeicons/primeicons.css";
 @plugin "tailwindcss-primeui";
 
+/* El modo oscuro se activa con la clase .app-dark en <html> (igual que el
+   darkModeSelector de PrimeNG), para que las utilidades `dark:` de Tailwind
+   se sincronicen con el tema de PrimeNG. */
+@custom-variant dark (&:where(.app-dark, .app-dark *));
+
 /* You can add global styles to this file, and also import other style files */

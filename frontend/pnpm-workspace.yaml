@@ -1,0 +1,9 @@
+# Config de pnpm: aprueba los build-scripts de dependencias nativas que
+# Angular necesita, para que `pnpm install` no falle por ERR_PNPM_IGNORED_BUILDS.
+# (No declara `packages:`, así que no convierte el repo en un workspace.)
+allowBuilds:
+  '@parcel/watcher': true
+  core-js: true
+  esbuild: true
+  lmdb: true
+  msgpackr-extract: true

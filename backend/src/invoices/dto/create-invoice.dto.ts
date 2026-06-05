@@ -10,9 +10,11 @@ import {
 import { InvoiceStatus } from '../../../generated/prisma/enums.js';
 
 export class CreateInvoiceDto {
+  // invoiceNumber NO se recibe: lo genera el backend de forma consecutiva.
+
   @IsString()
   @IsNotEmpty()
-  invoiceNumber: string;
+  concept: string;
 
   @IsOptional()
   @IsEnum(InvoiceStatus)

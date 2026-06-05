@@ -189,6 +189,7 @@ model TaskComment {
 model Invoice {
   id            Int           @id @default(autoincrement())
   invoiceNumber String        @unique @map("invoice_number")
+  concept       String        @default("")
   status        InvoiceStatus @default(draft)
 
   subtotal Decimal @db.Decimal(12, 2)
